@@ -34,6 +34,7 @@ public class UserController {
         logger.info("User Login in:{}",username);
         System.out.println(user.getName());
         System.out.println(user.getEmail());
+        System.out.println("hii");
         model.addAttribute("loggedInUser",user);
     }
 
