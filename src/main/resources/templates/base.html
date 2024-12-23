@@ -16,14 +16,19 @@
 </head>
 <body class="dark:bg-gray-900  dark:text-white">
 
+
+
+
+
 <div th:if="${loggedInUser}">
-  <div th:replace="user/user_navbar::user-navbar"></div>
+  <div th:replace="~{user/user_navbar::user-navbar}"></div>
 </div>
-<div th:unless=""></div>
 
-<section th:replace="~{navbar :: navbar}">
 
-</section>
+
+<div th:unless="${loggedInUser}">
+<section th:replace="~{navbar :: navbar}"></section>
+</div>
 <div class="p-4"><section  data-th-replace="${content}" ></section></div>
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 <script th:src="@{'/js/script.js'}"></script>

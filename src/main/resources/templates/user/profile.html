@@ -1,11 +1,20 @@
 <!doctype html>
 <html lang="en" th:replace="~{base ::parent(~{::#content},~{::title},~{::script})}">
-<head> <title>
+<head> <title th:text="${loggedInUser.name}+' | Cloudit'">
     Profile
 </title></head>
 <body>
+
 <div id="content">
-    <h1 th:text="${loggedInUser.name}+' | Cloudit'">welcome to Home of contact cloud</h1>
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+    <div class="pl-64 sm:pt-20" style="height: 1000px">
+    <div class="flex justify-center flex-col items-center">
+    <h1 class="text-5xl">Welcome Master</h1>
+    </div>
+    </div>
     <script>
         console.log("this is profile");
     </script>
