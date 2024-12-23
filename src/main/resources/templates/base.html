@@ -15,6 +15,12 @@
 
 </head>
 <body class="dark:bg-gray-900  dark:text-white">
+
+<div th:if="${loggedInUser}">
+  <div th:replace="user/user_navbar::user-navbar"></div>
+</div>
+<div th:unless=""></div>
+
 <section th:replace="~{navbar :: navbar}">
 
 </section>
