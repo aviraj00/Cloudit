@@ -18,5 +18,5 @@ public class SocialLink {
    private String title;
 
     @ManyToOne
-    private Contacts contacts;
+    private Contact contacts;
 }
