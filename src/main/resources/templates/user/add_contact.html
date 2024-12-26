@@ -19,13 +19,16 @@
 
             <div class="col-span-12 lg:col-span-6 ">
            <div class="card block  p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-900">
+
+               <div th:replace="~{message::messagebox}"></div>
+
            <h1 class="text-3xl font-semibold text-center">Add New Contact</h1>
               <p class="text-gray-500 text-center">This will be on cloud</p>
                <!--form -->
                <form th:action="@{/user/contact/add}" method="post" th:object="${contactForm}" novalidate>
                    <div>
                        <label for="contact-name" class="ml-1 mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Name</label>
-                       <div class="relative mb-6">
+                       <div class="relative mb-1 ">
                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                <i class="fa-regular fa-user w-4 h-4"></i>
                            </div>
@@ -36,14 +39,20 @@
                                    aria-label="Contact Name"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="Naruto"
-                                   required>
+                                   required><!--
+                           <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="py-2 px-1 text-red-600 text-xs">
+                               Invalid Name
+                           </p>-->
+
                        </div>
+                       <p class= "text-sm text-red-500 ml-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Invalid Name</p>
+
                    </div>
 
                    <!-- Contact Email -->
                    <div>
                        <label for="contact-email" class="ml-1 mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Email</label>
-                       <div class="relative mb-6">
+                       <div class="relative mb-1">
                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                <i class="fa-regular fa-envelope w-4 h-4"></i>
                            </div>
@@ -56,12 +65,14 @@
                                    placeholder="name@outlook.com"
                                    required>
                        </div>
+                       <p class="text-sm text-red-500 ml-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid Email</p>
+
                    </div>
 
                    <!-- Contact Phone Number -->
                    <div>
                        <label for="contact-phone" class="ml-1 mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Phone Number</label>
-                       <div class="relative mb-6">
+                       <div class="relative mb-1">
                            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                <i class="fa-solid fa-phone"></i>
                            </div>
@@ -75,11 +86,13 @@
                                    pattern="[0-9]{10}"
                                    required>
                        </div>
+                       <p class=" text-sm text-red-500 ml-1" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Invalid Name</p>
+
                    </div>
 
                    <!-- Contact Address -->
                    <div>
-                       <label for="contact-address" class="ml-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Address</label>
+                       <label for="contact-address" class="ml-1 mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Address</label>
                        <textarea th:field="*{address}"
                                id="contact-address"
                                name="address"
