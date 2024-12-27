@@ -19,7 +19,7 @@ public class ContactForm {
     @Email(message = "Email is Required")
     private String email;
     @NotBlank(message = "Required Number")
-    @Pattern(regexp = "^[0-9]{10}$",message = "Invalid Number")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid Number")
     private String phoneNumber;
 
     private String address;
@@ -29,5 +29,6 @@ public class ContactForm {
 
     private Boolean favorite;
 
-    private MultipartFile profilePic;
+
+    private MultipartFile contactImage;
 }

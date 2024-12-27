@@ -6,8 +6,8 @@
      role="alert"
      aria-live="polite">
 
-  <span th:text="*{content}" class="font-medium"></span>
-  <button type="button" class="ml-2 text-gray-500" onclick="this.parentElement.style.display='none';">×</button>
+    <span th:text="*{content}" class="font-medium"></span>
+    <button type="button" class="ml-2 text-gray-500" onclick="this.parentElement.style.display='none';">×</button>
 
-  <th:block th:text="${@sessionHelper.removemessage()}"></th:block>
+    <th:block th:text="${@sessionHelper.removemessage()}"></th:block>
 </div>
