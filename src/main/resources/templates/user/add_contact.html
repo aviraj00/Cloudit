@@ -25,7 +25,8 @@
                     <h1 class="text-3xl font-semibold text-center">Add New Contact</h1>
                     <p class="text-gray-500 text-center">This will be on cloud</p>
                     <!--form -->
-                    <form th:action="@{/user/contact/add}" method="post" th:object="${contactForm}" novalidate enctype="multipart/form-data">
+                    <form th:action="@{/user/contact/add}" method="post" th:object="${contactForm}" novalidate
+                          enctype="multipart/form-data">
                         <div>
                             <label for="contact-name"
                                    class="ml-1 mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
@@ -169,9 +170,10 @@
 
                             <label class="ml-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                    for="imagefile_input">Contact Image</label>
-                            <input th:field="*{contactImage}" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            <input th:field="*{contactImage}"
+                                   class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                    id="imagefile_input" type="file">
-                            <img class="max-h-40 rounded-lg shadow-md mx-auto" src="" id="upload_image_preview" alt="" >
+                            <img class="max-h-40 rounded-lg shadow-md mx-auto" src="" id="upload_image_preview" alt="">
                         </div>
 
                         <!-- Checkbox -->
