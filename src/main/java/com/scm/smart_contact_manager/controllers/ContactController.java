@@ -12,8 +12,7 @@ import com.scm.smart_contact_manager.services.UserService;
 import com.scm.smart_contact_manager.services.implimentation.ImageServiceImp;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -31,7 +31,6 @@ public class ContactController {
     @Autowired
     public ImageServiceImp imageServiceImp;
 
-    private final Logger logger = LoggerFactory.getLogger(ContactController.class);
 
     private final ContactService contactService;
     private final UserService userService;
@@ -87,5 +86,13 @@ public class ContactController {
         return "redirect:/user/contact/add";
     }
 
+    @RequestMapping
+    public String viewContacts(Model model,Authentication authentication){
+        String username=Helper.getEmailOfLoggedInUser(authentication);
+      User user=  userService.getUserByEmail(username);
+       List<Contact> contacts= contactService.getByUser(user);
+        model.addAttribute("contacts",contacts);
+        return "user/contacts";
+    }
 
 }

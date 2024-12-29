@@ -1,6 +1,7 @@
 package com.scm.smart_contact_manager.services.implimentation;
 
 import com.scm.smart_contact_manager.entities.Contact;
+import com.scm.smart_contact_manager.entities.User;
 import com.scm.smart_contact_manager.helper.ResourceNotFoundException;
 import com.scm.smart_contact_manager.repositories.ContactRepo;
 import com.scm.smart_contact_manager.services.ContactService;
@@ -53,5 +54,10 @@ public class ContactServiceImp implements ContactService {
     public List<Contact> getByUserId(String userId) {
        return contactRepo.findByUserId(userId);
 
+    }
+
+    @Override
+    public List<Contact> getByUser(User user) {
+        return contactRepo.findByUser(user);
     }
 }
