@@ -4,6 +4,7 @@ package com.scm.smart_contact_manager.controllers;
 import com.scm.smart_contact_manager.entities.Contact;
 import com.scm.smart_contact_manager.entities.User;
 import com.scm.smart_contact_manager.forms.ContactForm;
+import com.scm.smart_contact_manager.helper.AppConstants;
 import com.scm.smart_contact_manager.helper.Helper;
 import com.scm.smart_contact_manager.helper.Message;
 import com.scm.smart_contact_manager.helper.MessageType;
@@ -12,8 +13,8 @@ import com.scm.smart_contact_manager.services.UserService;
 import com.scm.smart_contact_manager.services.implimentation.ImageServiceImp;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,19 +22,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/user/contact")
 public class ContactController {
-    @Autowired
-    public ImageServiceImp imageServiceImp;
-
-
     private final ContactService contactService;
     private final UserService userService;
+    @Autowired
+    public ImageServiceImp imageServiceImp;
 
 
     public ContactController(ContactService contactService, UserService userService) {
@@ -87,11 +85,16 @@ public class ContactController {
     }
 
     @RequestMapping
-    public String viewContacts(Model model,Authentication authentication){
-        String username=Helper.getEmailOfLoggedInUser(authentication);
-      User user=  userService.getUserByEmail(username);
-       List<Contact> contacts= contactService.getByUser(user);
-        model.addAttribute("contacts",contacts);
+    public String viewContacts(@RequestParam(value = "page",defaultValue = "0") int page, @RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE+"") int size, @RequestParam(value = "sortBy",defaultValue = "name") String sortBy, @RequestParam(value = "direction",defaultValue = "asc") String direction, Model model, Authentication authentication) {
+        String username = Helper.getEmailOfLoggedInUser(authentication);
+        User user = userService.getUserByEmail(username);
+        Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
+        /*System.out.println("Total Elements: " + pageContact.getTotalElements());
+        System.out.println("Page Size: " + pageContact.getSize());
+        System.out.println("Current Page: " + pageContact.getNumber());
+        System.out.println("Contacts: " + pageContact.getContent());*/
+        model.addAttribute("pageContact", pageContact);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         return "user/contacts";
     }
 
