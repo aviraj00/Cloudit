@@ -5,24 +5,25 @@
   Search Contact
 </title></head>
 <body>
-
 <div id="content">
   <div th:if="${loggedInUser}">
     <div data-th-replace="~{user/sidebar :: sidebar}"></div>
   </div>
 
   <div class="pl-64 pt-20">
-    <div class="flex justify-center flex-col items-center">
-      <h1 class="text-5xl">Search Result</h1>
+    <div class="justify-center">
+      <h1 class="text-5xl text-center">All Your Contacts</h1>
+      <p class="text-center mt-3">Total Result Found: <span class="text-red-600" th:text="${pageContact.totalElements}"></span></p>
+
+
       <div class="contacts_container p-5">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-
-          <form th:action="@{/user/contact/search}" method="get">
+          <form th:action="@{/user/contact/search}" th:object="${contactSearchForm}" method="get">
             <div class="space-x-3 flex p-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
               <!--select box-->
               <div class="mt-3">
-                <select name="field" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option selected>Select Field</option>
+                <select th:field="*{field}"  id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option selected value="">Select Field</option>
                   <option value="name">Name</option>
                   <option value="email">Email</option>
                   <option value="phone">Phone</option>
@@ -37,7 +38,7 @@
                           stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                   </svg>
                 </div>
-                <input name="keyword" type="text" id="table-search-users"
+                <input th:field="*{value}"  type="text" id="table-search-users"
                        class="block p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="Search for users">
               </div>
@@ -46,8 +47,9 @@
             </div>
 
           </form>
+
           <!-- Contacts Table -->
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 z-0">
+          <table  class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 z-0">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Name</th>
@@ -89,17 +91,17 @@
             </tr>
             </tbody>
           </table>
-          <div class="p-5 mt-4 text-center">
+          <div th:unless="${pageContact.isEmpty()}" class="p-5 mt-4 text-center">
             <nav aria-label="Page navigation example">
               <ul class="inline-flex -space-x-px text-base h-10">
                 <li th:unless="${pageContact.first}">
-                  <a th:href="@{'/user/contact?size='+${pageSize}+'&page='+${pageContact.number -1}}"
+                  <a th:href="@{'/user/contact/search?size='+${pageSize}+'&page='+${pageContact.number -1}+'&field='+${contactSearchForm.field}+'&value='+${contactSearchForm.value}}"
                      class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
                 </li>
                 <li th:each="index:${#numbers.sequence(0,pageContact.totalPages -1)}">
 
                   <a
-                          data-th-href="@{'/user/contact?size='+${pageSize -1}+'&page='+${index}}"
+                          data-th-href="@{'/user/contact/search?size='+${pageSize}+'&page='+${index}+'&field='+${contactSearchForm.field}+'&value='+${contactSearchForm.value}}"
                           href="#"
                           data-th-classappend="${index==pageContact.number? 'bg-blue-50  dark:bg-gray-600' : 'bg-white dark:bg-gray-800'}"
                           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -108,7 +110,7 @@
                   </a>
                 </li>
                 <li th:unless="${pageContact.last}">
-                  <a th:href="@{'/user/contact?size='+${pageSize}+'&page='+${pageContact.number +1}}"
+                  <a th:href="@{'/user/contact/search?size='+${pageSize}+'&page='+${pageContact.number +1}+'&field='+${contactSearchForm.field}+'&value='+${contactSearchForm.value}}"
                      class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
                 </li>
               </ul>
@@ -119,12 +121,11 @@
         <!-- Pagination -->
 
       </div>
-
     </div>
   </div>
-  <script>
-    console.log("this is profile");
-  </script>
 </div>
+<script>
+
+</script>
 </body>
 </html>

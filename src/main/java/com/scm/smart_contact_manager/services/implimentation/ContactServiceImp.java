@@ -49,27 +49,27 @@ public class ContactServiceImp implements ContactService {
     }
 
     @Override
-    public Page<Contact> searchByName(String name, int page, int size, String sortBy, String order) {
+    public Page<Contact> searchByName(String name, int page, int size, String sortBy, String order,User user) {
         Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
         var pageable=PageRequest.of(page,size,sort);
 
-        return contactRepo.findByNameContaining(name,pageable);
+        return contactRepo.findByUserAndNameContaining(user,name,pageable);
     }
 
     @Override
-    public Page<Contact> searchByEmail(String email, int page, int size, String sortBy, String order) {
+    public Page<Contact> searchByEmail(String email, int page, int size, String sortBy, String order,User user) {
         Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
         var pageable=PageRequest.of(page,size,sort);
 
-        return contactRepo.findByEmailContaining(email,pageable);
+        return contactRepo.findByUserAndEmailContaining(user,email,pageable);
     }
 
     @Override
-    public Page<Contact> searchByPhoneNumber(String phoneNumber, int page, int size, String sortBy, String order ) {
+    public Page<Contact> searchByPhoneNumber(String phoneNumber, int page, int size, String sortBy, String order,User user ) {
         Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
         var pageable=PageRequest.of(page,size,sort);
 
-        return contactRepo.findByPhonenumberContaining(phoneNumber,pageable);
+        return contactRepo.findByUserAndPhonenumberContaining(user,phoneNumber,pageable);
     }
 
 
