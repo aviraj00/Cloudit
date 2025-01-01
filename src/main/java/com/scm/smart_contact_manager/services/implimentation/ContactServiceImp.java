@@ -8,7 +8,6 @@ import com.scm.smart_contact_manager.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -50,9 +49,29 @@ public class ContactServiceImp implements ContactService {
     }
 
     @Override
-    public List<Contact> search(String name) {
-    return null;
+    public Page<Contact> searchByName(String name, int page, int size, String sortBy, String order) {
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page,size,sort);
+
+        return contactRepo.findByNameContaining(name,pageable);
     }
+
+    @Override
+    public Page<Contact> searchByEmail(String email, int page, int size, String sortBy, String order) {
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page,size,sort);
+
+        return contactRepo.findByEmailContaining(email,pageable);
+    }
+
+    @Override
+    public Page<Contact> searchByPhoneNumber(String phoneNumber, int page, int size, String sortBy, String order ) {
+        Sort sort=order.equals("desc")?Sort.by(sortBy).descending():Sort.by(sortBy).ascending();
+        var pageable=PageRequest.of(page,size,sort);
+
+        return contactRepo.findByPhonenumberContaining(phoneNumber,pageable);
+    }
+
 
     @Override
     public List<Contact> getByUserId(String userId) {

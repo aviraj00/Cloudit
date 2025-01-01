@@ -1,6 +1,5 @@
 package com.scm.smart_contact_manager.controllers;
 
-
 import com.scm.smart_contact_manager.entities.Contact;
 import com.scm.smart_contact_manager.entities.User;
 import com.scm.smart_contact_manager.forms.ContactForm;
@@ -13,7 +12,8 @@ import com.scm.smart_contact_manager.services.UserService;
 import com.scm.smart_contact_manager.services.implimentation.ImageServiceImp;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -28,15 +28,19 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/user/contact")
 public class ContactController {
+
+    Logger logger= LoggerFactory.getLogger(ContactController.class);
     private final ContactService contactService;
     private final UserService userService;
-    @Autowired
-    public ImageServiceImp imageServiceImp;
+    public final ImageServiceImp imageServiceImp;
 
 
-    public ContactController(ContactService contactService, UserService userService) {
+
+
+    public ContactController(ContactService contactService, UserService userService, ImageServiceImp imageServiceImp) {
         this.contactService = contactService;
         this.userService = userService;
+        this.imageServiceImp = imageServiceImp;
     }
 
     @RequestMapping("/add")
@@ -85,17 +89,37 @@ public class ContactController {
     }
 
     @RequestMapping
-    public String viewContacts(@RequestParam(value = "page",defaultValue = "0") int page, @RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE+"") int size, @RequestParam(value = "sortBy",defaultValue = "name") String sortBy, @RequestParam(value = "direction",defaultValue = "asc") String direction, Model model, Authentication authentication) {
+    public String viewContacts(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy, @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model, Authentication authentication) {
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
         Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
-        /*System.out.println("Total Elements: " + pageContact.getTotalElements());
-        System.out.println("Page Size: " + pageContact.getSize());
-        System.out.println("Current Page: " + pageContact.getNumber());
-        System.out.println("Contacts: " + pageContact.getContent());*/
         model.addAttribute("pageContact", pageContact);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
         return "user/contacts";
     }
+        //search handler
+    @RequestMapping("/search")
+    public String searchHandler(@RequestParam("field") String field,@RequestParam("keyword") String value,@RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE +"") int size,@RequestParam(value = "page", defaultValue = "0") int page,@RequestParam(value = "sortBy", defaultValue = "name") String sortBy, @RequestParam(value = "direction", defaultValue = "asc") String direction,Model model){
+
+        logger.info("field {} keyword {}",field,value);
+        if (size < 1) {
+            size = AppConstants.PAGE_SIZE; // Set to a default size
+        }
+        Page<Contact> pageContact=null;
+        if (field.equalsIgnoreCase("name")){
+           pageContact= contactService.searchByName(value,page,size,sortBy,direction);
+        } else if (field.equalsIgnoreCase("email")) {
+            pageContact= contactService.searchByEmail(value,page,size,sortBy,direction);
+        } else if (field.equalsIgnoreCase("phoneNumber")) {
+            pageContact= contactService.searchByPhoneNumber(value,page,size,sortBy,direction);
+        }
+        model.addAttribute("pageContact",pageContact);
+        model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
+        return "user/search";
+
+
+
+    }
+
 
 }
