@@ -82,7 +82,7 @@
                             <td class="px-6 py-4">
                                 <a href="#"><i class="fa-solid w-6 h-6 fa-trash"></i></a>
                                 <a href="#"><i class="fa-solid w-6 h-6 fa-pen"></i></a>
-                                <a href="#"><i class="fa-solid w-6 h-6 fa-eye"></i></a>
+                                <button th:dataname="${c.id}" th:onclick="loadContactdata(this.getAttribute('dataname'))" ><i class="fa-solid w-6 h-6 fa-eye"></i></button>
                             </td>
                         </tr>
                         <tr th:if="${pageContact.content.isEmpty()}">
@@ -104,8 +104,8 @@
                                             href="#"
                                             data-th-classappend="${index==pageContact.number? 'bg-blue-50  dark:bg-gray-600' : 'bg-white dark:bg-gray-800'}"
                                             class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                                    >
-                                    /a>
+                                    > <span data-th-text="${index+1}"></span>
+                                    </a>
                                 </li>
                                 <li th:unless="${pageContact.last}">
                                     <a th:href="@{'/user/contact?size='+${pageSize}+'&page='+${pageContact.number +1}}"
@@ -120,8 +120,10 @@
 
             </div>
         </div>
+        <div th:replace="~{user/contact_modal :: contact}"></div>
     </div>
 </div>
+<script th:src="@{'/js/contact.js'}"></script>
 <script>
 
 </script>

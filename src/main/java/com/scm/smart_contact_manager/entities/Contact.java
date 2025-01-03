@@ -1,5 +1,6 @@
 package com.scm.smart_contact_manager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,7 @@ public class Contact {
 
   //  private List<String> socialLinks=new ArrayList<>();
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "contacts",cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
