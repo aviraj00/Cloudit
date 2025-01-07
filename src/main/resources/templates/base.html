@@ -30,7 +30,11 @@
 <section th:replace="~{navbar :: navbar}"></section>
 </div>
 <div class="p-4"><section  data-th-replace="${content}" ></section></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+
 <script th:src="@{'/js/script.js'}"></script>
 <th:block th:replace="${script}"></th:block>
 
