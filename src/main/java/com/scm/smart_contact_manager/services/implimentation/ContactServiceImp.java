@@ -29,7 +29,19 @@ public class ContactServiceImp implements ContactService {
 
     @Override
     public Contact update(Contact contact) {
-        return null;
+       var oldContact= contactRepo.findById(contact.getId()).orElseThrow(() -> new ResourceNotFoundException("Contact Not Found"));
+        oldContact.setName(contact.getName());
+        oldContact.setEmail(contact.getEmail());
+        oldContact.setPhonenumber(contact.getPhonenumber());
+        oldContact.setAddress(contact.getAddress());
+
+        oldContact.setDescription(contact.getDescription());
+        oldContact.setFavorite(contact.isFavorite());
+        oldContact.setPicture(contact.getPicture());
+        oldContact.setWebsiteLink(contact.getWebsiteLink());
+        oldContact.setCloudinaryImagePublicId(contact.getCloudinaryImagePublicId());
+        oldContact.setLinkedInLink(contact.getLinkedInLink());
+        return contactRepo.save(oldContact);
     }
 
     @Override
@@ -38,8 +50,8 @@ public class ContactServiceImp implements ContactService {
     }
 
     @Override
-    public Optional<Contact> getById(String id) {
-        return Optional.ofNullable(contactRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User Not Found")));
+    public Contact getById(String id) {
+        return contactRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
     }
 
     @Override

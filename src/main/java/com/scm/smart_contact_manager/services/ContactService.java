@@ -17,7 +17,7 @@ public interface ContactService {
 
     List<Contact> getAll();
 
-    Optional<Contact> getById(String id);
+    Contact getById(String id);
 
     void delete(String id);
 

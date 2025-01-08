@@ -86,7 +86,7 @@
 -->
                                 <button th:onclick="deleteContact([[${c.id}]])"><i class="fa-solid w-6 h-6 fa-trash"></i></button>
 
-                                <a href="#"><i class="fa-solid w-6 h-6 fa-pen"></i></a>
+                                <a th:href="@{'/user/contact/view/'+*{c.id}}"><i class="fa-solid w-6 h-6 fa-pen"></i></a>
                                 <button th:dataname="${c.id}" th:onclick="loadContactdata(this.getAttribute('dataname'))" ><i class="fa-solid w-6 h-6 fa-eye"></i></button>
                             </td>
                         </tr>

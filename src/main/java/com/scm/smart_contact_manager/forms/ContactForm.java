@@ -1,6 +1,7 @@
 package com.scm.smart_contact_manager.forms;
 
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -29,6 +30,8 @@ public class ContactForm {
 
     private Boolean favorite;
 
-
+   // @ValidFile(message = "Invalid File")
     private MultipartFile contactImage;
+
+    private String picture;
 }

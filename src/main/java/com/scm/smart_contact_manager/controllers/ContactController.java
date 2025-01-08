@@ -98,7 +98,7 @@ public class ContactController {
 
     //search handler
     @RequestMapping("/search")
-    public String searchHandler(@ModelAttribute ContactSearchForm contactSearchForm,  @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy, @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model, Authentication authentication) {
+    public String searchHandler(@ModelAttribute ContactSearchForm contactSearchForm, @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "sortBy", defaultValue = "name") String sortBy, @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model, Authentication authentication) {
 
         var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
         Page<Contact> pageContact = null;
@@ -120,12 +120,66 @@ public class ContactController {
 
     //delete
     @RequestMapping("/delete/{contactId}")
-    public String deleteContact(@PathVariable String contactId, HttpSession session){
+    public String deleteContact(@PathVariable String contactId, HttpSession session) {
 
         contactService.delete(contactId);
-        logger.info("contactdelte:{}",contactId);
-        session.setAttribute("message",Message.builder().content("Contact Delete Successfully").type(MessageType.green).build());
+        logger.info("contactdelte:{}", contactId);
+        session.setAttribute("message", Message.builder().content("Contact Delete Successfully").type(MessageType.green).build());
         return "redirect:/user/contact";
+    }
+
+    //upadte contact view
+    @GetMapping("/view/{contactId}")
+    public String updateContactFormView(@PathVariable String contactId, Model model) {
+       var contact= contactService.getById(contactId);
+       ContactForm contactForm=new ContactForm();
+       contactForm.setName(contact.getName());
+       contactForm.setEmail(contact.getEmail());
+       contactForm.setPhoneNumber(contact.getPhonenumber());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setPicture(contact.getPicture());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setLinkedInLink(contact.getLinkedInLink());
+
+        model.addAttribute("contactForm", contactForm);
+        model.addAttribute("contactId",contactId);
+        return "user/view";
+    }
+
+    @PostMapping("/update/{contactId}")
+    public String updateContact(@PathVariable("contactId") String contactId,
+                                @Valid @ModelAttribute ContactForm contactForm,
+                                BindingResult bindingResult,
+                                Model model) {
+        if(bindingResult.hasErrors()){
+         return  "user/view";
+        }
+     //update
+        var con=contactService.getById(contactId);
+        con.setId(contactId);
+        con.setName(contactForm.getName());
+        con.setAddress(contactForm.getAddress());
+        con.setEmail(contactForm.getEmail());
+        con.setFavorite(contactForm.getFavorite());
+        con.setDescription(contactForm.getDescription());
+        con.setPhonenumber(contactForm.getPhoneNumber());
+        con.setWebsiteLink(contactForm.getWebsiteLink());
+        con.setLinkedInLink(contactForm.getLinkedInLink());
+
+        //image process
+      if(contactForm.getContactImage()!=null && !contactForm.getContactImage().isEmpty()) {
+          String fileName=UUID.randomUUID().toString();
+          String imageUrl=imageServiceImp.uploadImage(contactForm.getContactImage(),fileName);
+          con.setCloudinaryImagePublicId(fileName);
+          con.setPicture(imageUrl);
+          contactForm.setPicture(imageUrl);
+      }
+        var updateCon=contactService.update(con);
+      //  model.addAttribute("contactForm",contactForm);
+        model.addAttribute("message",Message.builder().content("Contact Update").type(MessageType.green).build());
+        return "redirect:/user/contact/view/" + contactId;
     }
 
 }

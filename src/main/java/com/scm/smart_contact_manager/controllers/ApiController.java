@@ -17,6 +17,6 @@ public class ApiController {
 
    @GetMapping("/contact/{contactId}")
     public Contact getContact(@PathVariable String contactId){
-       return contactService.getById(contactId).orElse(null);
+       return contactService.getById(contactId);
     }
 }

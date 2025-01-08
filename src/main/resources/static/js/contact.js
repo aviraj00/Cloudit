@@ -44,7 +44,7 @@ async function loadContactdata(id) {
         document.querySelector("#contact_email").innerHTML = data.email;
         document.querySelector("#contact_image").src = data.picture;
         document.querySelector("#contact_address").innerHTML = data.address;
-        document.querySelector("#contact_phone").innerHTML = data.phoneNumber;
+        document.querySelector("#contact_phone").innerHTML = data.phonenumber;
         document.querySelector("#contact_about").innerHTML = data.description;
         const contactFavorite = document.querySelector("#contact_favorite");
         if (data.favorite) {
