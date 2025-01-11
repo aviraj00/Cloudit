@@ -22,7 +22,7 @@
 
                     <div th:replace="~{message::messagebox}"></div>
 
-                    <h1 class="text-3xl font-semibold text-center">Add New Contact</h1>
+                    <h1 class="text-3xl font-semibold text-center"> Update Contact</h1>
                     <p class="text-gray-500 text-center">This will be on cloud</p>
                     <!--form -->
                     <form th:action="@{'/user/contact/update/' + ${contactId}}" method="post" th:object="${contactForm}" novalidate
@@ -168,12 +168,19 @@
 
                         <div class="mb-4">
 
-                            <label class="ml-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                   for="imagefile_input">Contact Image</label>
+                            <label class="ml-1 block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="imagefile_input">
+                                Contact Image
+                            </label>
                             <input th:field="*{contactImage}"
                                    class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                                   id="imagefile_input" type="file">
+                                   id="imagefile_input" type="file" accept="image/*">
+
+                            <!-- Validation error message -->
+                            <p class="text-sm text-red-500 ml-1" th:if="${#fields.hasErrors('contactImage')}" th:errors="*{contactImage}">
+                                Invalid File
+                            </p>
                             <img class="max-h-40 rounded-lg shadow-md mx-auto" th:src="*{picture}" id="upload_image_preview" alt="">
+
                         </div>
 
                         <!-- Checkbox -->

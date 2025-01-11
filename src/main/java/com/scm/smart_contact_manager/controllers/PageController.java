@@ -13,10 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.Binding;
 
@@ -30,7 +27,7 @@ public class PageController {
 
 
     @GetMapping("/")
-    public String main(){
+    public String index(){
         return "redirect:/home";
     }
 
@@ -60,7 +57,7 @@ public class PageController {
 
     @GetMapping("/login")
     public String login() {
-        return new String("login");
+        return "login";
     }
 
     @GetMapping("/signup")
@@ -71,7 +68,7 @@ public class PageController {
     }
     //processing for register
 
-    @RequestMapping(value = "/do-register", method = RequestMethod.POST)
+    @PostMapping(value = "/do-register")
     public String processRegister(@Valid @ModelAttribute UserForm userForm, BindingResult rBindingResult, HttpSession session) {
         System.out.println("processing");
         System.out.println(userForm);
@@ -95,7 +92,8 @@ public class PageController {
         user.setEmail(userForm.getEmail());
         user.setPassword(userForm.getPassword());        /*user. setAbout (userForm.getAbout());*/
         user.setPhoneNumber(userForm.getPhoneNumber());
-        user.setEnabled(true);
+
+        user.setEnabled(false);
         user.setProfilPic("static/images/profile.png");
         user.setAbout(userForm.getAbout());
 
