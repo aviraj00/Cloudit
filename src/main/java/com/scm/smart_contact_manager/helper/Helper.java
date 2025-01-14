@@ -10,32 +10,36 @@ import java.security.Principal;
 
 public class Helper {
 
-    public static String getEmailOfLoggedInUser(Authentication authentication){
+    public static String getEmailOfLoggedInUser(Authentication authentication) {
 
-        if (authentication instanceof OAuth2AuthenticationToken){
-           var oAuth2AuthenticationToken= (OAuth2AuthenticationToken)authentication;
-           var clientId=oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
-            var oauth2User = (OAuth2User)authentication.getPrincipal();
-            String username="";
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            var oAuth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+            var clientId = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
+            var oauth2User = (OAuth2User) authentication.getPrincipal();
+            String username = "";
 
-           if(clientId.equalsIgnoreCase("google")){
-               System.out.println("Getting email from google");
+            if (clientId.equalsIgnoreCase("google")) {
+                System.out.println("Getting email from google");
 
-               username=oauth2User.getAttribute("email").toString();
-           } else if(clientId.equalsIgnoreCase("github")){
+                username = oauth2User.getAttribute("email").toString();
+            } else if (clientId.equalsIgnoreCase("github")) {
 
-               System.out.println("Getting email from github");
-                username=oauth2User.getAttribute("email") !=null?oauth2User.getAttribute("email").toString():oauth2User.getAttribute("login").toString()+"@gmail.com";
+                System.out.println("Getting email from github");
+                username = oauth2User.getAttribute("email") != null ? oauth2User.getAttribute("email").toString() : oauth2User.getAttribute("login").toString() + "@gmail.com";
 
 
-           }
+            }
             return username;
-        }else{
+        } else {
             System.out.println("Getting data from local database");
             return authentication.getName();
         }
 
 
+    }
 
+    public static String getLinkForEmailVerification(String emailToken){
+        String link = "http://localhost:8080/auth/verify-email?token=" + emailToken;
+        return link;
     }
 }
