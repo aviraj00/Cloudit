@@ -16,5 +16,5 @@ public interface UserService {
     List<User> getAllUser();
 
     User getUserByEmail(String email);
-
+    User getUserByToken(String token);
 }

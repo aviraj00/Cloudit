@@ -9,19 +9,20 @@
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
     </div>
 
-    <div class="pl-64 pt-20">
+    <div class="sm:p-16 md:pl-64 pt-50 lg:pl-64 pt-20">
         <div class="justify-center">
             <h1 class="text-5xl text-center">All Your Contacts</h1>
             <p class="text-center mt-3">List of Contacts</p>
 
-            <div class="contacts_container p-5">
+            <div class="contacts_container p-3">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <div th:replace="~{message::messagebox}"></div>
-                    <form th:object="${contactSearchForm}"  th:action="@{/user/contact/search}" >
-                        <div class="space-x-3 flex p-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                       <div class="flex md:flex-row  flex-col items-center justify-between">
+                        <form th:object="${contactSearchForm}"  th:action="@{/user/contact/search}" >
+                         <div class="space-x-3 flex p-5 items-center justify-start flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
                             <!--select box-->
-                            <div class="mt-3">
-                                <select th:field="*{field}"   id="countries"
+                            <div class="mt-3 pl-2">
+                                <select required th:field="*{field}"   id="countries"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option selected value="">Select Field</option>
                                     <option value="name">Name</option>
@@ -43,13 +44,18 @@
                                        placeholder="Search for users">
                             </div>
 
-                            <button class="px-3 py-2 text-white rounded bg-blue-600 " type="submit">Search</button>
+                            <button class=" px-3 py-2 text-white rounded bg-blue-600 " type="submit">Search</button>
+
                         </div>
 
                     </form>
+                           <div>
+                     <button  onclick="exportData()" class="px-3 py-2 text-white rounded bg-blue-600 " type="button">Export</button>
+                           </div>
+                 </div>
 
                     <!-- Contacts Table -->
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 z-0">
+                    <table id="contact_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 z-0">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">Name</th>
@@ -95,6 +101,30 @@
                         </tr>
                         </tbody>
                     </table>
+                    <!--hidden table-->
+                    <table id="export_table" class="hidden">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Favorite</th>
+                            <th>Website Link</th>
+                            <th>LinkedIn Link</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c : ${pageContact.getContent()}">
+                            <td th:text="${c.name}">Name Placeholder</td>
+                            <td th:text="${c.email}">Email Placeholder</td>
+                            <td th:text="${c.phonenumber}">Phone Placeholder</td>
+                            <td th:text="${c.favorite ? 'Yes' : 'No'}">Favorite Placeholder</td>
+                            <td th:text="${c.websiteLink}">Website Link Placeholder</td>
+                            <td th:text="${c.linkedInLink}">LinkedIn Link Placeholder</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
                     <div th:unless="${pageContact.isEmpty()}" class="p-5 mt-4 text-center">
                         <nav aria-label="Page navigation example">
                             <ul class="inline-flex -space-x-px text-base h-10">
@@ -128,9 +158,18 @@
         <div th:replace="~{user/contact_modal :: contact}"></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
 <script th:src="@{'/js/contact.js'}"></script>
 <script>
-
+function exportData(){
+    TableToExcel.convert(document.getElementById("export_table"), {
+        name: "contact.xlsx",
+        sheet: {
+            name: "Sheet 1"
+        }
+    });
+}
 </script>
+
 </body>
 </html>

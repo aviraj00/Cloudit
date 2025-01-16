@@ -105,4 +105,9 @@ public class UserServiceImpl implements UserService {
         return userRepo.findByEmail(email).orElse(null);
 
     }
+
+    @Override
+    public User getUserByToken(String token) {
+        return userRepo.findByEmailTokem(token).orElse(null);
+    }
 }

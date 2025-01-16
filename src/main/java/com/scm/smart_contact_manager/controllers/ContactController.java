@@ -196,7 +196,7 @@ public class ContactController {
     public String updateContact(@PathVariable("contactId") String contactId,
                                 @Valid @ModelAttribute ContactForm contactForm,
                                 BindingResult bindingResult,
-                                Model model) {
+                                Model model,HttpSession session) {
 
         // update the contact
         if (bindingResult.hasErrors()) {
@@ -231,9 +231,9 @@ public class ContactController {
         var updateCon = contactService.update(con);
         logger.info("updated contact {}", updateCon);
 
-        model.addAttribute("message", Message.builder().content("Contact Updated !!").type(MessageType.green).build());
+        session.setAttribute("message", Message.builder().content("Contact Updated !!").type(MessageType.green).build());
 
-        return "redirect:/user/contacts/view/" + contactId;
+        return "redirect:/user/contact/view/" + contactId;
     }
 
 }
