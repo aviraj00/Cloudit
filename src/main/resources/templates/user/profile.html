@@ -10,9 +10,63 @@
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
     </div>
 
-    <div class="pl-64 sm:pt-20" style="height: 1000px">
-    <div class="flex justify-center flex-col items-center">
-    <h1 class="text-5xl">Welcome Master</h1>
+    <div class="pl-4 sm:pl-16 lg:pl-64 pt-10 sm:pt-20">
+        <div class="flex justify-center items-center flex-col">
+            <div class="w-full max-w-xs sm:max-w-md sm:h-fit lg:max-w-lg">
+                <div class="flex justify-center items-center">
+                    <!-- Profile Card -->
+                    <div class="bg-white border dark:bg-gray-800 border-black shadow-lg rounded-lg mt-10 p-6 w-full font-sans">
+                        <!-- Profile Picture -->
+                        <div class="flex justify-center">
+                            <img
+                                    th:src="${loggedInUser.profilPic != null ? loggedInUser.profilPic : '/images/default-profile.png'}"
+                                    alt="Profile Picture"
+                                    class="w-24 h-24 rounded-full object-cover border-4 border-blue-500"
+                            />
+                        </div>
+                        <!-- User Info -->
+                        <div class="text-center mt-4">
+                            <h2 class="text-xl font-semibold text-gray-800 dark:text-white" th:text="${loggedInUser.name}">
+                                John Doe
+                            </h2>
+                            <p class="text-sm text-gray-500" th:text="${loggedInUser.email}">john.doe@example.com</p>
+                        </div>
+                        <!-- About Section -->
+                        <div class="mt-6">
+                            <h4 class="text-lg font-medium text-gray-800 dark:text-white">About</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed"
+                               th:text="${loggedInUser.about != null ? loggedInUser.about : 'No details provided.'}">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.
+                            </p>
+                        </div>
+                        <!-- Contact Info -->
+                        <div class="mt-6">
+                            <h4 class="text-lg font-medium text-gray-800 dark:text-white">Contact</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2"
+                               th:text="${loggedInUser.phoneNumber != null ? loggedInUser.phoneNumber : 'Not provided'}">
+                                +123 456 7890
+                            </p>
+                        </div>
+                        <!-- Provider Info -->
+                        <div class="mt-6">
+                            <h4 class="text-lg font-medium text-gray-800 dark:text-white">Login with</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2" th:text="${loggedInUser.provider}">
+                                SELF
+                            </p>
+                        </div>
+                        <!-- Buttons -->
+                        <div class="mt-6 flex justify-between items-center">
+                            <button class="bg-blue-500 text-white text-sm px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                                Edit Profile
+                            </button>
+                            <button class="bg-red-500 text-white text-sm px-4 py-2 rounded-md hover:bg-red-600 transition">
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     </div>
     <script>

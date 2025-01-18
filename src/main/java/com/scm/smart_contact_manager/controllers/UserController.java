@@ -31,7 +31,7 @@ public class UserController {
         String username=  Helper.getEmailOfLoggedInUser(authentication);
         User user= userService.getUserByEmail(username);
 
-        logger.info("User Login in:{}",username);
+       // logger.info("User Login in:{}",username);
         System.out.println(user.getName());
         System.out.println(user.getEmail());
         System.out.println("hii");
@@ -49,7 +49,7 @@ public class UserController {
       String username=  Helper.getEmailOfLoggedInUser(authentication);
        User user= userService.getUserByEmail(username);
 
-        logger.info("User Login in:{}",username);
+       // logger.info("User Login in:{}",username);
         System.out.println(user.getName());
         System.out.println(user.getEmail());
         model.addAttribute("loggedInUser",user);
