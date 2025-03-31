@@ -74,19 +74,11 @@ docker run -d -p 80:8080 your-dockerhub-username/cloudit-app
 _Add screenshots of your app interface_
 
 ## 🛡 Security Enhancements
-- Use **HTTPS** with AWS ACM
 - Implement **JWT authentication**
-- Host the database using **AWS RDS** (optional)
+- Host the database using **AWS RDS**(optional)
 
 ## 📜 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-## 📬 Contact
-For any queries, reach out at: [your-email@example.com](mailto:your-email@example.com)
-
 ---
-*Made with ❤️ by [Your Name](https://github.com/your-username)*
+*Made with ❤️ by [Aviraj](https://github.com/aviraj00)*
 
