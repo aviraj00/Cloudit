@@ -6,17 +6,17 @@ Cloudit is a web-based contact manager that allows users to securely store, mana
 
 ## 🛠 Tech Stack
 - **Backend:** Spring Boot
-- **Database:** MySQL (Hosted on AWS or EC2 instance)
-- **Frontend:** HTML, CSS (or React, if applicable)
+- **Database:** Postgresql 
+- **Frontend:** Thymleaf
 - **Deployment:** AWS EC2, Docker
 - **Containerization:** Docker
-- **Reverse Proxy:** Nginx (if used)
+- **Reverse Proxy:** Nginx 
 
 ## 🎯 Features
 ✅ User Authentication (Login & Signup)  
 ✅ Add, Edit, Delete Contacts  
 ✅ Search and Filter Contacts  
-✅ Secure Data Storage in MySQL  
+✅ Secure Data Storage in Postgresql  
 ✅ Responsive UI  
 ✅ Deployed on AWS EC2 using Docker  
 
@@ -24,7 +24,7 @@ Cloudit is a web-based contact manager that allows users to securely store, mana
 ### Prerequisites
 - Java 17+ installed
 - Docker installed
-- MySQL database set up
+- Postgresql database set up
 - AWS EC2 instance ready
 
 ### Clone the Repository
@@ -76,9 +76,6 @@ _Add screenshots of your app interface_
 ## 🛡 Security Enhancements
 - Implement **JWT authentication**
 - Host the database using **AWS RDS**(optional)
-
-## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ---
 *Made with ❤️ by [Aviraj](https://github.com/aviraj00)*
 
