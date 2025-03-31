@@ -1,5 +1,6 @@
 package com.scm.smart_contact_manager.config;
 
+
 import com.scm.smart_contact_manager.helper.Message;
 import com.scm.smart_contact_manager.helper.MessageType;
 import jakarta.servlet.ServletException;

@@ -9,19 +9,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImp implements EmailService {
+
     @Autowired
     private JavaMailSender emailSender;
+
     @Value("${spring.mail.properties.domain_name}")
     private String from;
 
     @Override
     public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+       /* SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(body);
         simpleMailMessage.setFrom(from);
-        emailSender.send(simpleMailMessage);
+        emailSender.send(simpleMailMessage);*/
     }
 
     @Override
@@ -33,4 +35,6 @@ public class EmailServiceImp implements EmailService {
     public void sendEmailWithAttachment() {
 
     }
+
+
 }

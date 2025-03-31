@@ -1,15 +1,20 @@
 package com.scm.smart_contact_manager.helper;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 
+@Component
 public class Helper {
 
+    @Value("${server.baseUrl}")
+    private  String baseUrl;
     public static String getEmailOfLoggedInUser(Authentication authentication) {
 
         if (authentication instanceof OAuth2AuthenticationToken) {
@@ -38,8 +43,8 @@ public class Helper {
 
     }
 
-    public static String getLinkForEmailVerification(String emailToken){
-        String link = "http://localhost:8080/auth/verify-email?token=" + emailToken;
-        return link;
+    public  String getLinkForEmailVerification(String emailToken){
+
+        return  this.baseUrl  + "/auth/verify-email?token=" + emailToken;
     }
 }

@@ -1,5 +1,6 @@
 console.log("contact");
-const baseurl="http://localhost:8080"
+//const baseurl="http://localhost:8080"
+const baseurl="http://cloudits.us-east-1.elasticbeanstalk.com/login"
 const viewContactModal = document.getElementById('view_contact_modal');
 
 const options = {

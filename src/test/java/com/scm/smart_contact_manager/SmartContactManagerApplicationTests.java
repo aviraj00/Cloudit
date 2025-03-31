@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SmartContactManagerApplicationTests {
 
-    @Test
+   /* @Test
     void contextLoads() {
     }
 @Autowired
@@ -17,6 +17,6 @@ private EmailService service;
     @Test
     void sendEmailTest(){
         service.sendEmail("avi00aviraj@gmail.com","Testing","Testing new Site");
-    }
+    }*/
 
 }

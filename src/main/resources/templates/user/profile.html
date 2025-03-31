@@ -18,11 +18,8 @@
                     <div class="bg-white border dark:bg-gray-800 border-black shadow-lg rounded-lg mt-10 p-6 w-full font-sans">
                         <!-- Profile Picture -->
                         <div class="flex justify-center">
-                            <img
-                                    th:src="${loggedInUser.profilPic != null ? loggedInUser.profilPic : '/images/default-profile.png'}"
-                                    alt="Profile Picture"
-                                    class="w-24 h-24 rounded-full object-cover border-4 border-blue-500"
-                            />
+                            <img onerror="this.onerror=null; this.src='https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'" th:src="@{${loggedInUser.profilPic}}" class="shadow-md rounded-full h-12 me-3 sm:h-16">
+
                         </div>
                         <!-- User Info -->
                         <div class="text-center mt-4">

@@ -85,10 +85,7 @@ logger.info("OAuthenticationSuccessHandler");
 
 
 
-     }     else if (authorizedClientRegistrationId.equalsIgnoreCase("linkedin")){
-
-
-    }else{
+     }     else{
 
      }
 

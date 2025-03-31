@@ -11,6 +11,7 @@ import com.scm.smart_contact_manager.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private Helper helper;
 
     @Autowired
     private EmailServiceImp emailServiceImp;
@@ -44,9 +48,14 @@ public class UserServiceImpl implements UserService {
 
         String emailToken = UUID.randomUUID().toString();
        user.setEmailTokem(emailToken);
-        User savedUser = userRepo.save(user);
-        String emailLink = Helper.getLinkForEmailVerification(emailToken);
-        emailServiceImp.sendEmail(savedUser.getEmail(), "Verify Email To login into Cloudit", emailLink);
+        User savedUser;
+        try {
+           savedUser = userRepo.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("User with this email already exists.");
+        }
+       /* String emailLink = helper.getLinkForEmailVerification(emailToken);
+        emailServiceImp.sendEmail(savedUser.getEmail(), "Verify Email To login into Cloudit", emailLink);*/
 
         return savedUser;
     }

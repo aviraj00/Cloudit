@@ -5,6 +5,7 @@ import com.scm.smart_contact_manager.entities.User;
 import com.scm.smart_contact_manager.forms.UserForm;
 import com.scm.smart_contact_manager.helper.Message;
 import com.scm.smart_contact_manager.helper.MessageType;
+import com.scm.smart_contact_manager.repositories.UserRepo;
 import com.scm.smart_contact_manager.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -25,6 +26,8 @@ public class PageController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserRepo userRepo;
 
     @GetMapping("/")
     public String index(){
@@ -93,11 +96,17 @@ public class PageController {
         user.setPassword(userForm.getPassword());        /*user. setAbout (userForm.getAbout());*/
         user.setPhoneNumber(userForm.getPhoneNumber());
 
-        user.setEnabled(false);
+        user.setEnabled(true);
         user.setProfilPic("static/images/profile.png");
         user.setAbout(userForm.getAbout());
 
 
+
+        if (userRepo.findByEmail(user.getEmail()).isPresent()) {
+            Message message= Message.builder().content("User already exist").type(MessageType.red).build();
+            session.setAttribute("message",message);
+            return "redirect:/signup"; // Return to registration page
+        }
         User savedUser= userService.saveUser(user);
         System.out.println("user saved");
 
