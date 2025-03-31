@@ -1,6 +1,4 @@
 # Cloudit - Contact Manager Web App
-
-![Cloudit Logo](https://your-logo-url.com)  
 *A simple and efficient contact management system*
 
 ## 🚀 About the Project
@@ -72,7 +70,7 @@ docker run -d -p 80:8080 your-dockerhub-username/cloudit-app
 4. Access the app in your browser: `http://your-ec2-ip`
 
 ## 📷 Screenshots
-![Dashboard](https://your-image-url.com)  
+![Dashboard](dashboard.png)  
 _Add screenshots of your app interface_
 
 ## 🛡 Security Enhancements
