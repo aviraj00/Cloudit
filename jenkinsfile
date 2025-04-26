@@ -14,6 +14,15 @@ pipeline {
             }
         }
 
+        stage('Build JAR') {
+            steps {
+                echo 'Building Spring Boot JAR file...'
+                sh '''
+                    mvn clean install -DskipTests
+                '''
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
@@ -40,20 +49,12 @@ pipeline {
                     docker network create cloudit-network || true
 
                     docker run -d \
-                        --restart=always \
                         --name cloudit-app \
                         --network cloudit-network \
                         --env-file .env \
-                        -p 9090:8080 \
+                        -p 8080:8080 \
                         ${DOCKER_IMAGE}
                 '''
-            }
-        }
-
-        stage('Clean Up') {
-            steps {
-                echo 'Cleaning up dangling images...'
-                sh 'docker image prune -f'
             }
         }
     }
