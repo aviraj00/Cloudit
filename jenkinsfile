@@ -22,6 +22,16 @@ pipeline {
             }
         }
 
+        stage('Remove Existing Containers (if any)') {
+            steps {
+                echo 'Removing old containers if they exist...'
+                sh '''
+                    docker rm -f ${POSTGRES_CONTAINER} || true
+                    docker rm -f ${APP_CONTAINER} || true
+                '''
+            }
+        }
+
         stage('Start PostgreSQL') {
             steps {
                 echo 'Starting PostgreSQL container...'
@@ -34,7 +44,7 @@ pipeline {
                         -v postgres_data:/var/lib/postgresql/data \
                         postgres:latest
                 '''
-                sleep 10 // Wait a bit for postgres to be ready
+                sleep 10
             }
         }
 
@@ -61,10 +71,8 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up unused containers if necessary...'
-            sh '''
-                docker ps -a
-            '''
+            echo 'Checking running containers...'
+            sh 'docker ps -a'
         }
     }
 }
