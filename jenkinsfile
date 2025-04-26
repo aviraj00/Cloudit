@@ -52,7 +52,7 @@ pipeline {
                         --name cloudit-app \
                         --network cloudit-network \
                         --env-file .env \
-                        -p 8080:8080 \
+                        -p 9090:8080 \
                         ${DOCKER_IMAGE}
                 '''
             }
