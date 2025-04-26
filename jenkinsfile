@@ -40,12 +40,20 @@ pipeline {
                     docker network create cloudit-network || true
 
                     docker run -d \
+                        --restart=always \
                         --name cloudit-app \
                         --network cloudit-network \
                         --env-file .env \
-                        -p 8080:8080 \
+                        -p 9090:8080 \
                         ${DOCKER_IMAGE}
                 '''
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                echo 'Cleaning up dangling images...'
+                sh 'docker image prune -f'
             }
         }
     }
