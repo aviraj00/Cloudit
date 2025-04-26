@@ -2,67 +2,39 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'cloudit-app:latest'
-        NETWORK_NAME = 'cloudit-network'
-        POSTGRES_CONTAINER = 'postgres-db'
-        APP_CONTAINER = 'cloudit-app'
-        POSTGRES_IMAGE = 'postgres:latest'
-        POSTGRES_VOLUME = 'postgres_data'
+        POSTGRES_CONTAINER = "postgres-db"
+        APP_CONTAINER = "cloudit-app"
+        NETWORK_NAME = "cloudit-network"
+        DOCKER_IMAGE = "cloudit-app:latest"
     }
 
     stages {
-
-        stage('Build Application') {
+        stage('Checkout Code') {
             steps {
-                echo 'Building Java application...'
-                sh 'mvn clean install -DskipTests'
+                checkout scm
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Application') {
             steps {
-                echo 'Building Docker image for app...'
+                echo 'Building Docker image for Spring Boot app...'
                 sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
 
-        stage('Stop Old Containers') {
+        stage('Start PostgreSQL') {
             steps {
-                echo 'Stopping and removing old containers (if exist)...'
-                sh '''
-                    docker stop ${APP_CONTAINER} || true
-                    docker rm ${APP_CONTAINER} || true
-                    docker stop ${POSTGRES_CONTAINER} || true
-                    docker rm ${POSTGRES_CONTAINER} || true
-                '''
-            }
-        }
-
-        stage('Prepare Network and Volume') {
-            steps {
-                echo 'Creating network and volume if not exists...'
-                sh '''
-                    docker network create ${NETWORK_NAME} || true
-                    docker volume create ${POSTGRES_VOLUME} || true
-                '''
-            }
-        }
-
-        stage('Run Postgres Database') {
-            steps {
-                echo 'Starting Postgres container...'
+                echo 'Starting PostgreSQL container...'
                 sh '''
                     docker run -d \
                         --name ${POSTGRES_CONTAINER} \
                         --network ${NETWORK_NAME} \
                         --env-file .env \
-                        -e POSTGRES_DB=${POSTGRES_DB} \
-                        -e POSTGRES_USER=${POSTGRES_USER} \
-                        -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD} \
                         -p 5432:5432 \
-                        -v ${POSTGRES_VOLUME}:/var/lib/postgresql/data \
-                        ${POSTGRES_IMAGE}
+                        -v postgres_data:/var/lib/postgresql/data \
+                        postgres:latest
                 '''
+                sleep 10 // Wait a bit for postgres to be ready
             }
         }
 
@@ -70,39 +42,29 @@ pipeline {
             steps {
                 echo 'Starting Spring Boot app container...'
                 sh '''
-                    sleep 10  # wait for Postgres to be ready
                     docker run -d \
                         --name ${APP_CONTAINER} \
                         --network ${NETWORK_NAME} \
                         --env-file .env \
-                        -e SPRING_DATASOURCE_URL=jdbc:postgresql://${POSTGRES_CONTAINER}:${POSTGRES_PORT}/${POSTGRES_DB} \
-                        -e SPRING_DATASOURCE_USERNAME=${POSTGRES_USER} \
-                        -e SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD} \
-                        -e BASE_URL=${BASE_URL} \
-                        -e CLOUDINARY_NAME=${CLOUDINARY_NAME} \
-                        -e CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY} \
-                        -e CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET} \
-                        -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \
-                        -e GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET} \
-                        -e GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID} \
-                        -e GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET} \
-                        -e EMAIL_PORT=${EMAIL_PORT} \
-                        -e EMAIL_USERNAME=${EMAIL_USERNAME} \
-                        -e EMAIL_PASSWORD=${EMAIL_PASSWORD} \
-                        -e EMAIL_DOMAIN=${EMAIL_DOMAIN} \
                         -p 9090:8080 \
                         ${DOCKER_IMAGE}
                 '''
             }
         }
+
+        stage('Deployment Successful') {
+            steps {
+                echo '✅ Deployment completed successfully!'
+            }
+        }
     }
 
     post {
-        success {
-            echo '✅ Deployment completed successfully!'
-        }
-        failure {
-            echo '❌ Deployment failed!'
+        always {
+            echo 'Cleaning up unused containers if necessary...'
+            sh '''
+                docker ps -a
+            '''
         }
     }
 }
