@@ -41,7 +41,7 @@ services:
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       EMAIL_DOMAIN: ${EMAIL_DOMAIN}
     ports:
-      - "8080:8080"
+      - "9090:8080"
     depends_on:
       - postgres-db
     networks:
