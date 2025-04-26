@@ -1,9 +1,7 @@
-
-
 version: '3.8'
 
 services:
-  postgres:
+  postgres-db:
     image: postgres:latest
     container_name: postgres-db
     restart: always
@@ -17,22 +15,41 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cloudit-network
 
   cloudit-app:
-    build: .
+    build: .   # ⬅️ Build Docker image from local Dockerfile (no pulling from hub)
     container_name: cloudit-app
     restart: always
-    depends_on:
-      - postgres
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/${POSTGRES_DB}"
-      SPRING_DATASOURCE_USERNAME: "${POSTGRES_USER}"
-      SPRING_DATASOURCE_PASSWORD: "${POSTGRES_PASSWORD}"
-      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:${POSTGRES_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      BASE_URL: ${BASE_URL}
+      CLOUDINARY_NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_DOMAIN: ${EMAIL_DOMAIN}
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres-db
+    networks:
+      - cloudit-network
 
 volumes:
   postgres_data:
+
+networks:
+  cloudit-network:
+    driver: bridge
