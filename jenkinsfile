@@ -15,9 +15,9 @@ pipeline {
             }
         }
 
-        stage('Build Application') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image for Spring Boot app...'
+                echo 'Building Docker image (with Maven inside Docker)...'
                 sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
@@ -36,6 +36,7 @@ pipeline {
             steps {
                 echo 'Starting PostgreSQL container...'
                 sh '''
+                    docker network create ${NETWORK_NAME} || true
                     docker run -d \
                         --name ${POSTGRES_CONTAINER} \
                         --network ${NETWORK_NAME} \
