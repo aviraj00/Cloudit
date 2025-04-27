@@ -2,10 +2,8 @@ pipeline {
     agent any
 
     environment {
-        POSTGRES_CONTAINER = "postgres-db"
-        APP_CONTAINER = "cloudit-app"
         NETWORK_NAME = "cloudit-network"
-        DOCKER_IMAGE = "cloudit-app:latest"
+        DOCKER_COMPOSE_FILE = "docker-compose.yml"
     }
 
     stages {
@@ -18,48 +16,22 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image (with Maven inside Docker)...'
-                sh 'docker build -t ${DOCKER_IMAGE} .'
+                sh 'docker-compose build'
             }
         }
 
         stage('Remove Existing Containers (if any)') {
             steps {
                 echo 'Removing old containers if they exist...'
-                sh '''
-                    docker rm -f ${POSTGRES_CONTAINER} || true
-                    docker rm -f ${APP_CONTAINER} || true
-                '''
+                sh 'docker-compose down || true'
             }
         }
 
-        stage('Start PostgreSQL') {
+        stage('Start Containers') {
             steps {
-                echo 'Starting PostgreSQL container...'
-                sh '''
-                    docker network create ${NETWORK_NAME} || true
-                    docker run -d \
-                        --name ${POSTGRES_CONTAINER} \
-                        --network ${NETWORK_NAME} \
-                        --env-file .env \
-                        -p 5432:5432 \
-                        -v postgres_data:/var/lib/postgresql/data \
-                        postgres:latest
-                '''
+                echo 'Starting all containers...'
+                sh 'docker-compose up -d'
                 sleep 10
-            }
-        }
-
-        stage('Run Spring Boot App') {
-            steps {
-                echo 'Starting Spring Boot app container...'
-                sh '''
-                    docker run -d \
-                        --name ${APP_CONTAINER} \
-                        --network ${NETWORK_NAME} \
-                        --env-file .env \
-                        -p 9090:8080 \
-                        ${DOCKER_IMAGE}
-                '''
             }
         }
 
