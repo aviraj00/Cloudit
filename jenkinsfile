@@ -23,7 +23,7 @@ pipeline {
         stage('Remove Existing Containers (if any)') {
             steps {
                 echo 'Removing old containers if they exist...'
-                sh 'docker-compose down || true'
+                sh 'docker-compose down -v || true'
             }
         }
 
