@@ -11,21 +11,20 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
+    # ❗ Remove port mapping to avoid 5432 conflict (internal network is enough)
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - cloudit-network
 
   cloudit-app:
-    build: .   # ⬅️ Build Docker image from local Dockerfile (no pulling from hub)
+    build: .   # Build Docker image from local Dockerfile
     container_name: cloudit-app
     restart: always
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:${POSTGRES_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       BASE_URL: ${BASE_URL}
@@ -41,7 +40,7 @@ services:
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       EMAIL_DOMAIN: ${EMAIL_DOMAIN}
     ports:
-      - "9090:8080"
+      - "9090:8080"   # App needs to expose itself externally
     depends_on:
       - postgres-db
     networks:
